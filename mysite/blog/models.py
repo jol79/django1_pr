@@ -48,6 +48,8 @@ class Post(models.Model):
     ###
     class Meta:
         ordering = ['-publish']
+        # I can specify custom name for db tables as below:
+        # db_table = ['']
 
     # human-readable repr of the object:
     def __str__(self):
