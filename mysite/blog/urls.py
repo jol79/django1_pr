@@ -2,13 +2,17 @@ from django.urls import path
 from django.conf.urls import url
 from . import views
 
+app_name = 'blog'
+
 urlpatterns = [
-    # use this page as main when opening web-site:
-    path('', views.index, name='index'),
+    ###
+    # post views:
+    ###
 
-    # using prefix /post you can open this page:
-    path('post/', views.individual_post, name='individual_post'),
-
-    # url pattern for ind post page:
-    # url(r'$', views.individual_post, name='individual_post__link')
+    # multiple posts data:
+    path('', views.post_list, name='post_list'),
+    # single post data:
+    path('<int:year>/<int:month>/<int:day>/<slug:post>/',
+         views.post_detail,
+         name='post_detail')
 ]

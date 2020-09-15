@@ -1,6 +1,22 @@
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
+
+
+# creating custom manager named "publishedmanager"
+class PublishedManager(models.Manager):
+    ###
+    # custom method to retrieve data from db
+    # previously method named as "get_queryset"
+    # but because of our overriding it now
+    # known as "filter" method of our custom
+    # manager "published"
+    ###
+    def get_queryset(self):
+        return super(PublishedManager,
+                     self).get_queryset()\
+                          .filter(status="published")
 
 
 class Post(models.Model):
@@ -40,6 +56,19 @@ class Post(models.Model):
                               choices=STATUS_CHOICES,
                               default='draft')
 
+    # default manager:
+    objects = models.Manager()
+    # custom manager:
+    published = PublishedManager()
+
+    # used to link the specific posts:
+    def get_absolute_url(self):
+        return reverse('blog:post_detail',
+                       args=[self.publish.year,
+                             self.publish.month,
+                             self.publish.day,
+                             self.slug])
+
     ###
     # metadata (e.g. you tell django to sort
     # results by the publish desc, so we need
@@ -54,16 +83,3 @@ class Post(models.Model):
     # human-readable repr of the object:
     def __str__(self):
         return self.title
-
-
-
-
-
-
-
-
-
-
-
-
-

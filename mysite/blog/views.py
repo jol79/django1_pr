@@ -1,18 +1,23 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
+from .models import Post
 
 
-def individual_post(request):
-    # return HttpResponse("Ola, this is ind post")
-    return render(
-        request,
-        'index.html'
-    )
+def post_list(request):
+    # print all posts using our custom created manager:
+    posts = Post.published.all()
+    return render(request,
+                  'blog/post/list.html',
+                  {'posts': posts})
 
 
-def index(request):
-    # return HttpResponse("Welcome on index page !!!")
-    return render(
-        request,
-        'post.html'
-    )
+def post_detail(request, year, month, day, post):
+    # print single post info:
+    post = get_object_or_404(Post, slug=post,
+                             status="published",
+                             publish_year=year,
+                             publish_month=month,
+                             publish_day=day)
+    return render(request,
+                  'blog/post/detail.html',
+                  {'post': post})
