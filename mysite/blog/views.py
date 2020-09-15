@@ -4,29 +4,41 @@ from django.http import HttpResponse
 from .models import Post
 
 
-def post_list(request):
-    object_list = Post.published.all()
-    # 5 posts are allowed on one page
-    paginator = Paginator(object_list, 5)
-    page = request.GET.get('page')
+# def post_list(request):
+#     object_list = Post.published.all()
+#     # 5 posts are allowed on one page
+#     paginator = Paginator(object_list, 5)
+#     page = request.GET.get('page')
+#
+#     try:
+#         posts = paginator.page(page)
+#     ###
+#     # if the page is not an integer, go to the first page:
+#     ###
+#     except PageNotAnInteger:
+#         posts = paginator.page(1)
+#     ###
+#     # if page out of range, opens the last page with res:
+#     ###
+#     except EmptyPage:
+#         posts = paginator.page(paginator.num_pages)
+#
+#     return render(request,
+#                   'blog/post/list.html',
+#                   {'page': page,
+#                    'posts': posts})
+from django.views.generic import ListView
 
-    try:
-        posts = paginator.page(page)
-    ###
-    # if the page is not an integer, go to the first page:
-    ###
-    except PageNotAnInteger:
-        posts = paginator.page(1)
-    ###
-    # if page out of range, opens the last page with res:
-    ###
-    except EmptyPage:
-        posts = paginator.page(paginator.num_pages)
 
-    return render(request,
-                  'blog/post/list.html',
-                  {'page': page,
-                   'posts': posts})
+###
+# class-based view, analogous to the previous post_list
+# view
+###
+class PostListView(ListView):
+    queryset = Post.published.all()
+    context_object_name = 'posts'
+    paginate_by = 5
+    template_name = 'blog/post/list.html'
 
 
 def post_detail(request, year, month, day, post):
