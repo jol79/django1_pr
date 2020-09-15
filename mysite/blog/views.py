@@ -1,14 +1,32 @@
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from .models import Post
 
 
 def post_list(request):
-    # print all posts using our custom created manager:
-    posts = Post.published.all()
+    object_list = Post.published.all()
+    # 5 posts are allowed on one page
+    paginator = Paginator(object_list, 5)
+    page = request.GET.get('page')
+
+    try:
+        posts = paginator.page(page)
+    ###
+    # if the page is not an integer, go to the first page:
+    ###
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    ###
+    # if page out of range, opens the last page with res:
+    ###
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+
     return render(request,
                   'blog/post/list.html',
-                  {'posts': posts})
+                  {'page': page,
+                   'posts': posts})
 
 
 def post_detail(request, year, month, day, post):
