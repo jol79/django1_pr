@@ -28,6 +28,7 @@ from .models import Post
 #                   {'page': page,
 #                    'posts': posts})
 from django.views.generic import ListView
+from .forms import EmailPostForm
 
 
 ###
@@ -51,3 +52,30 @@ def post_detail(request, year, month, day, post):
     return render(request,
                   'blog/post/detail.html',
                   {'post': post})
+
+
+def post_share(request, post_id):
+    # form was submitted:
+    post = get_object_or_404(Post,
+                             id=post_id,
+                             status="published")
+
+    # if for submitted by user:
+    if request.method == "POST":
+
+        # get data from user
+        form = EmailPostForm(request.POST)
+
+        # if all text-boxes submitted
+        if form.is_valid():
+            # fields passed validation:
+            cd = form.cleaned_data
+            # send email
+    else:
+        form = EmailPostForm()
+    return render(request,
+                  "blog/post/share.html",
+                  {"post": post,
+                   "form": form})
+
+
