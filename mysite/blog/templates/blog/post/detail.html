@@ -9,5 +9,7 @@
     <p class="date">
         Published {{ post.publish }} by {{ post.author }}
     </p>
+    <!-- linebreaks attribute means that before body
+     txt break line will be pasted -->
     {{ post.body|linebreaks }}
 {% endblock %}

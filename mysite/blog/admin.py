@@ -30,9 +30,9 @@ class PostAdmin(admin.ModelAdmin):
     ###
     # - dropdown feature that open new window with
     # users conf page where you search by user or
-    # even add new users depends on your preferences
-    # - this feature useful when you have big users
-    # amount registered in site db
+    # even add new users, depends on your preferences
+    # - this feature useful when you have big amount
+    #  of users registered in site db
     ###
     raw_id_fields = ("author", )
     date_hierarchy = "publish"

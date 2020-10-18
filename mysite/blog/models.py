@@ -63,6 +63,8 @@ class Post(models.Model):
 
     # used to link the specific posts:
     def get_absolute_url(self):
+
+        # reverse method allows to build urls by their name and pass optional params
         return reverse('blog:post_detail',
                        args=[self.publish.year,
                              self.publish.month,
