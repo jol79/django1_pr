@@ -85,3 +85,39 @@ class Post(models.Model):
     # human-readable repr of the object:
     def __str__(self):
         return self.title
+
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post,
+                             ###
+                             # define relation many-to-one
+                             # each comment can have only one post
+                             # and each post can have multiple comments
+                             # I defined on_delet=models.CASCADE attribute,
+                             # means 'if post will be deleted by user,
+                             # all related comments will be deleted respectively
+                             ###
+                             on_delete=models.CASCADE,
+                             ###
+                             # using related_name attribute
+                             # we can retrieve the post of a
+                             # comment object using comment.post,
+                             # and all comments using comment.post.all()
+                             # NOTE: if I will not define this attribute
+                             # relation will be named automatically, as:
+                             # ClassName(starts with lower case) followed
+                             # by _set -> comment_set
+                             related_name="comments")
+    name = models.CharField(max_length=80)
+    email = models.EmailField()
+    body = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        # sort comments in chronological order
+        ordering = ('created',)
+
+    def __str__(self):
+        return f"Comment by {self.name} on {self.post}"

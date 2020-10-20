@@ -17,6 +17,43 @@
         Share this post
         </a>
     </p>
+
+    <!-- Displays total comments number: -->
+    {% with comments.count as total_comments %}
+        <h2>
+            {{ total_comments }} comment {{ total_comments|pluralize }}
+        </h2>
+    {% endwith %}
+
+    <!-- Displays list of comments -->
+    {% for comment in comments %}
+        <div class="comment">
+            <p class="info">
+                <!-- enumerate each comment using 'forloop.counter' variable(contains loop counter for each iteration) -->
+                Comment {{ forloop.counter }} by {{ comment.name }}
+                <!-- date when comment was posted -->
+                {{ comment.created }}
+            </p>
+            <!-- text of the comment -->
+            {{ comment.body|linebreaks }}
+        </div>
+    <!-- if comments isEmpty -> no comments yet -->
+    {% empty %}
+        <p> There are no comments yet </p>
+    {% endfor %}
+
+    <!-- Creating new comment: -->
+    {% if new_comment %}
+        <h2>Your new comment has been added</h2>
+    {% else %}
+        <h2>Add a new comment</h2>
+        <form method="post">
+            {{ comment_form.as_p }}
+            {% csrf_token %}
+            <p><input type="submit" value="Add new comment"></p>
+        </form>
+    {% endif %}
+
     {% include "pagination.html" with page=page_obj %}
 
 {% endblock %}

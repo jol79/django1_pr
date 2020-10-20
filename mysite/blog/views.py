@@ -1,10 +1,24 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
-from .models import Post
-from django.views.generic import ListView
-from .forms import EmailPostForm
 from django.core.mail import send_mail
+
+"""
+forms
+"""
+from .forms import EmailPostForm
+from .forms import CommentForm
+
+"""
+views
+"""
+from django.views.generic import ListView
+
+"""
+models
+"""
+from .models import Post
+from .models import Comment
 
 
 def post_list(request):
@@ -52,9 +66,38 @@ def post_detail(request, year, month, day, post):
                              publish__year=year,
                              publish__month=month,
                              publish__day=day)
+
+    # list of active comments for this post:
+    comments = post.comments.filter(active=True)
+
+    new_comment = None
+
+    if request.method == "Post":
+        # comment was posted:
+        comment_form = CommentForm(data=request.POST)
+
+        # check if form filled valid:
+        if comment_form.is_valid():
+            ###
+            # create comment but not save it to the db yet
+            # for situations when you want to make final
+            # changes and only after that submit form:
+            ###
+            new_comment = comment_form.save(commit=False)
+            # assign the current page to the comment:
+            new_comment.post = post
+            # save the comment to the db:
+            new_comment.save()
+    else:
+        # if the method is NOT POST -> load form again
+        comment_form = CommentForm()
+
     return render(request,
                   'blog/post/detail.html',
-                  {'post': post})
+                  {'post': post,
+                   'comments': comments,
+                   'new_comment': new_comment,
+                   'comment_form': comment_form})
 
 
 def post_share(request, post_id):
