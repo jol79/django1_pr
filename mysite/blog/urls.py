@@ -18,5 +18,10 @@ urlpatterns = [
     # single post data:
     path('<int:year>/<int:month>/<int:day>/<slug:post>/',
          views.post_detail,
-         name='post_detail')
+         name='post_detail'),
+
+    # email post information sharing:
+    path('<int:post_id>/share/',
+         views.post_share,
+         name='post_share')
 ]

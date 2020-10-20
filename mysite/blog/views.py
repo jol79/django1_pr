@@ -2,33 +2,34 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from .models import Post
-
-
-# def post_list(request):
-#     object_list = Post.published.all()
-#     # 5 posts are allowed on one page
-#     paginator = Paginator(object_list, 5)
-#     page = request.GET.get('page')
-#
-#     try:
-#         posts = paginator.page(page)
-#     ###
-#     # if the page is not an integer, go to the first page:
-#     ###
-#     except PageNotAnInteger:
-#         posts = paginator.page(1)
-#     ###
-#     # if page out of range, opens the last page with res:
-#     ###
-#     except EmptyPage:
-#         posts = paginator.page(paginator.num_pages)
-#
-#     return render(request,
-#                   'blog/post/list.html',
-#                   {'page': page,
-#                    'posts': posts})
 from django.views.generic import ListView
 from .forms import EmailPostForm
+from django.core.mail import send_mail
+
+
+def post_list(request):
+    object_list = Post.published.all()
+    # 5 posts are allowed on one page
+    paginator = Paginator(object_list, 5)
+    page = request.GET.get('page')
+
+    try:
+        posts = paginator.page(page)
+    ###
+    # if the page is not an integer, go to the first page:
+    ###
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    ###
+    # if page out of range, opens the last page with res:
+    ###
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+
+    return render(request,
+                  'blog/post/list.html',
+                  {'page': page,
+                   'posts': posts})
 
 
 ###
@@ -37,8 +38,10 @@ from .forms import EmailPostForm
 ###
 class PostListView(ListView):
     queryset = Post.published.all()
+    # variable posts will keep the query results
     context_object_name = 'posts'
     paginate_by = 5
+    # template to render the page
     template_name = 'blog/post/list.html'
 
 
@@ -55,27 +58,42 @@ def post_detail(request, year, month, day, post):
 
 
 def post_share(request, post_id):
-    # form was submitted:
+    # retrieve post by id:
     post = get_object_or_404(Post,
                              id=post_id,
                              status="published")
+    sent = False
 
-    # if for submitted by user:
     if request.method == "POST":
-
-        # get data from user
+        # form was submitted
         form = EmailPostForm(request.POST)
 
-        # if all text-boxes submitted
+        ###
+        # if all text-boxes submitted with valid data
+        # in case if data is not valid the result of
+        # is_valid is False, and form with submitted
+        # data will be rendered again in the template
+        ###
         if form.is_valid():
-            # fields passed validation:
+            # retrieve validated data:
             cd = form.cleaned_data
-            # send email
+            post_url = request.build_absolute_uri(
+                post.get_absolute_url())
+            subject = f"{cd['name']} recommends you read" \
+                      f"{post.title}"
+            message = f"Read {post.title} as {post_url}\n\n" \
+                      f"{cd['name']}\'s comments: {cd['comments']}"
+            send_mail(subject, message, 'asdnaskdjndkajdasn@gmail.com',
+                      [cd['to']])
+
+            # variable to use in the template, needed to inform user a success message when it successfully submitted
+            sent = True
     else:
         form = EmailPostForm()
     return render(request,
                   "blog/post/share.html",
                   {"post": post,
-                   "form": form})
+                   "form": form,
+                   "sent": sent})
 
 
