@@ -1,8 +1,16 @@
 from django import template
 from ..models import Post
+from django.utils.safestring import mark_safe
+import markdown
 
 # registering my own template
 register = template.Library()
+
+
+# registering custom filter
+@register.filter(name="markdown")
+def markdown_format(text):
+    return mark_safe(markdown.markdown(text))
 
 
 # decorator used to register the func. as a simple tag

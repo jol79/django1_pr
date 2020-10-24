@@ -1,4 +1,5 @@
 {% extends "blog/base.html" %}
+{% load blog_tags %}
 
 {% block title %}Offers{% endblock %}
 
@@ -17,7 +18,8 @@
         <p class="date">
             Published {{ post.publish }} by {{ post.author}}
         </p>
-        {{ post.body|truncatewords:30|linebreaks }}
+        <!-- truncatewords_html:30 will truncate words each 30 symbols avoiding unclosed HTML tags -->
+        {{ post.body|markdown|truncatewords_html:30 }}
     {% endfor %}
     {% include "pagination.html" with page=posts %}
 <!--        {% include "pagination.html" with page=page_obj %}-->
