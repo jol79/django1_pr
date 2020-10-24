@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     # to load its models
     ###
     'blog.apps.BlogConfig',
+    'taggit',
 ]
 
 MIDDLEWARE = [

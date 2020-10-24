@@ -25,13 +25,13 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="cd3df0b3-621c-4c71-82ea-a37a57dae0df">
-        <schema name="main" object-types="view, column, table, dataset trigger, constraint, index" />
+        <schema name="main" object-types="column, index, table, dataset trigger, constraint, view" />
       </connection>
     </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="cd3df0b3-621c-4c71-82ea-a37a57dae0df">
-      <console name="main_bd" type="STANDARD" schema="main" session="Main"><![CDATA[select * from blog_comment;]]></console>
+      <console name="main_bd" type="STANDARD" schema="main" session="Main" />
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">

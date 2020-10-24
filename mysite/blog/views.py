@@ -6,8 +6,7 @@ from django.core.mail import send_mail
 """
 forms
 """
-from .forms import EmailPostForm
-from .forms import CommentForm
+from .forms import EmailPostForm, CommentForm
 
 """
 views
@@ -17,8 +16,7 @@ from django.views.generic import ListView
 """
 models
 """
-from .models import Post
-from .models import Comment
+from .models import Post, Comment
 
 
 def post_list(request):

@@ -1,6 +1,8 @@
 {% extends "blog/base.html" %}
 
 {% block title %}My blog{% endblock %}
+<p class="tags">Tags: {{ post.tags.all|join:", " }}</p>
+<text>Here should be tags that I created</text>
 
 {% block content %}
     <h1>My blog</h1>
