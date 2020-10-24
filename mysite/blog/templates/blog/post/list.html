@@ -1,11 +1,13 @@
 {% extends "blog/base.html" %}
 
-{% block title %}My blog{% endblock %}
-<p class="tags">Tags: {{ post.tags.all|join:", " }}</p>
-<text>Here should be tags that I created</text>
+{% block title %}Offers{% endblock %}
+
 
 {% block content %}
-    <h1>My blog</h1>
+    <h1>Selling offers</h1>
+    <p class="tags">
+        Tags: {{ post.tags.all|join:", " }}
+    </p>
     {% for post in posts %}
         <h2>
             <a href="{{ post.get_absolute_url }}">

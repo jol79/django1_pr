@@ -11,8 +11,8 @@ from .models import Post, Comment, TaggableManager
 class PostAdmin(admin.ModelAdmin):
     # list_display - allows to set the seeing fields
     list_display = ("title", "slug", "author",
-                    "publish", "status")
-    list_filter = ("status", "created", "publish", "author")
+                    "publish", "status", )
+    list_filter = ("status", "created", "publish", "author", "tags")
 
     ###
     # - search criteria, means that search key will
@@ -23,7 +23,7 @@ class PostAdmin(admin.ModelAdmin):
     ###
     # - "prepopulated_fields" - means that all text
     # that will be provided in the title text-box
-    # will be added in the slug text-box automat.
+    # will be added in the slug text-box automatically
     ###
     prepopulated_fields = {"slug": ("title", )}
 

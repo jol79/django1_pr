@@ -1,4 +1,7 @@
 {% load static %}
+<!-- similar to import, needed to include by own custom tags -->
+{% load blog_tags %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,8 +15,11 @@
         {% endblock %}
     </div>
     <div id="sidebar">
-        <h2>My blog</h2>
-        <p>This is my blog</p>
+        <h2>My offers</h2>
+        <p>Here is my offers(total: {% total_posts %}) that I'm trying to sell</p>
+        <h3>Latest posts</h3>
+        <!-- using template tag to show 3 latest post: -->
+        {% show_latest_posts 3 %}
     </div>
 </body>
 </html>
