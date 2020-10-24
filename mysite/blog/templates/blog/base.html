@@ -20,6 +20,9 @@
         <h3>Latest posts</h3>
         <!-- using template tag to show 3 latest post: -->
         {% show_latest_posts 3 %}
+        <a href="{% url "blog:post_feed" %}">
+            Subscribe to my RSS feed
+        </a>
     </div>
 </body>
 </html>
