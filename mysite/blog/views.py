@@ -151,9 +151,14 @@ def post_search(request):
         if form.is_valid():
             query = form.cleaned_data['query']
             
+            search_vector = SearchVector('title')
+            search_query = SearchQuery(query)
+
             results = Post.published.annotate(
-                search = SearchVector('title')
-                ).filter(search=query)
+                search=search_vector,
+                rank=SearchRank(search_vector, search_query)
+            ).filter(search=search_query).order_by('-rank')
+
             # results = Post.objects.filter(title__search=query)
     
     return render(request, 'blog/post/search.html',
