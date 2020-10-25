@@ -145,14 +145,14 @@ def post_search(request):
     results = []
 
     # looking for query param in the requerst.GET dict
-    if 'query' is request.GET:
+    if 'query' in request.GET:
         # sending form using GET method, so that the resulting URL includes the query param
         form = SearchForm(request.GET)
         if form.is_valid():
             query = form.cleaned_data['query']
             
             results = Post.published.annotate(
-                search = SearchVector('title', 'body ')
+                search = SearchVector('title')
                 ).filter(search=query)
             # results = Post.objects.filter(title__search=query)
     
@@ -160,4 +160,5 @@ def post_search(request):
                  {'form': form,
                  'query': query, 
                  'results': results})
+
 
