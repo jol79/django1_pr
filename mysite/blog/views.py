@@ -141,7 +141,7 @@ def post_share(request, post_id):
 
 def post_search(request): 
     form = SearchForm()
-    query = ''
+    query = None
     results = []
 
     # looking for query param in the requerst.GET dict
@@ -151,10 +151,11 @@ def post_search(request):
         if form.is_valid():
             query = form.cleaned_data['query']
             
-            # results = Post.published.annotate(
-            #     search = SearchVector('title', 'body'),
-            # ).filter(search=query)
-            results = Post.objects.filter(title__search=query)
+            results = Post.published.annotate(
+                search = SearchVector('title', 'body ')
+                ).filter(search=query)
+            # results = Post.objects.filter(title__search=query)
+    
     return render(request, 'blog/post/search.html',
                  {'form': form,
                  'query': query, 
