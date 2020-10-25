@@ -26,8 +26,13 @@ urlpatterns = [
           views.post_share,
           name='post_share'),
 
-     # post feed
+     # post feed: 
      path('feed/', 
           LatestPostFeed(), 
           name='post_feed'),
+
+     # search:
+     path('search/', 
+          views.post_search, 
+          name='post_search'),
 ]

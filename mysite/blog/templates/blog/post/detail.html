@@ -17,6 +17,7 @@
             Share this post
         </a>
     </p>
+
     <!-- Displays total comments number: -->
     {% with comments.count as total_comments %}
         <h2>
@@ -36,6 +37,7 @@
             <!-- text of the comment -->
             {{ comment.body|linebreaks }}
         </div>
+        
     <!-- if comments isEmpty -> no comments yet -->
     {% empty %}
         <p> There are no comments yet </p>

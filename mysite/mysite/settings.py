@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     # sitemap feature
     'django.contrib.sites', 
     'django.contrib.sitemaps',
+    'django.contrib.postgres',
 ]
 
 MIDDLEWARE = [
