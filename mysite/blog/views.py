@@ -2,7 +2,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.core.mail import send_mail
-from django.contrib.postgres.search import SearchVector
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 
 """
 forms
@@ -148,14 +148,14 @@ def post_search(request):
     if 'query' is request.GET:
         # sending form using GET method, so that the resulting URL includes the query param
         form = SearchForm(request.GET)
-        if form.is_valid:
+        if form.is_valid():
             query = form.cleaned_data['query']
             
             # results = Post.published.annotate(
             #     search = SearchVector('title', 'body'),
             # ).filter(search=query)
             results = Post.objects.filter(title__search=query)
-    return render(request, 'blog/search.html',
+    return render(request, 'blog/post/search.html',
                  {'form': form,
                  'query': query, 
                  'results': results})
